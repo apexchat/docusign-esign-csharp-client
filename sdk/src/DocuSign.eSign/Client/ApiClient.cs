@@ -28,6 +28,7 @@ using RestSharp;
 using DocuSign.eSign.Client.Auth;
 using Microsoft.IdentityModel.Tokens;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 
 namespace DocuSign.eSign.Client
 {
@@ -280,11 +281,9 @@ namespace DocuSign.eSign.Client
                 path, method, queryParams, postBody, headerParams, formParams, fileParams,
                 pathParams, contentType);
             InterceptRequest(request);
-            IRestResponse response = null;
-            var handle = RestClient.ExecuteAsync(request, r => response = r);
-            handle.WebRequest.GetResponseAsync().Wait();
+            var response = await RestClient.ExecuteTaskAsync(request);
             InterceptResponse(request, response);
-            return (Object)response;
+            return response;
         }
 
         /// <summary>
